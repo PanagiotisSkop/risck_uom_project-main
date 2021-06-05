@@ -26,6 +26,9 @@ public class BoardController  {
     private Country country,country2;
     private boolean twoSelected = false,oneSelected = false;
     private GameLogic game;
+    private String attDisable = "-fx-background-color: #bd1111";
+    private String highLight = "CountryButtonHighlight";
+    private String enableColor = "-fx-text-fill: #777d78";
 
     //Opens the StartMenu window
     @FXML
@@ -45,7 +48,7 @@ public class BoardController  {
     @FXML
     private void attackButton() throws IOException {
         //Sets the attackButton disable again
-        attackButton.setStyle("-fx-background-color: #bd1111");
+        attackButton.setStyle(attDisable);
         attackButton.setDisable(true);
         //Reset selected flags
         oneSelected = false;
@@ -132,7 +135,7 @@ public class BoardController  {
                 country = game.getWorld().findCountry(buttonId);
                 if(game.getCurrentPlayer().getCountriesOwned().contains(country) && country.getNumTroops() > 1) {
                     Button b1 = (Button) button.lookup("#" + country.toString());
-                    b1.getStyleClass().add("CountryButtonHighlight");
+                    b1.getStyleClass().add(highLight);
                     oneSelected = true;
                 }
             }
@@ -142,7 +145,7 @@ public class BoardController  {
                     country2 = game.getWorld().findCountry(buttonId);
                     if(!game.getCurrentPlayer().getCountriesOwned().contains(country2) && country.getAdjacentCountries().contains(country2)) {
                         Button b2 = (Button) button.lookup("#" + country2.toString());
-                        b2.getStyleClass().add("CountryButtonHighlight");
+                        b2.getStyleClass().add(highLight);
                         if (game.getWorld().attackCheck(country, country2, game.getCurrentPlayer())) {
                             attackButton.setStyle("-fx-background-color: #0fea88");
                             attackButton.setDisable(false);
@@ -156,7 +159,7 @@ public class BoardController  {
                     //Reset selected countries if the user select a third country
                 }else{
                     updateMap(game.getWorld().getPlayers(), game.getScene());
-                    attackButton.setStyle("-fx-background-color: #bd1111");
+                    attackButton.setStyle(attDisable);
                     attackButton.setDisable(true);
                     twoSelected =false;
                 }
@@ -171,7 +174,7 @@ public class BoardController  {
                 country = game.getWorld().findCountry(buttonId);
                 if(game.getCurrentPlayer().getCountriesOwned().contains(country) && country.getNumTroops() > 1) {
                     Button b1 = (Button) button.lookup("#" + country.toString());
-                    b1.getStyleClass().add("CountryButtonHighlight");
+                    b1.getStyleClass().add(highLight);
                     oneSelected = true;
                 }
             } else {
@@ -179,7 +182,7 @@ public class BoardController  {
                     country2 = game.getWorld().findCountry(buttonId);
                     if (game.getCurrentPlayer().getCountriesOwned().contains(country2) && game.getWorld().findPath(country,country2) && country != country2) {
                         Button b2 = (Button) button.lookup("#" + country2.toString());
-                        b2.getStyleClass().add("CountryButtonHighlight");
+                        b2.getStyleClass().add(highLight);
                         if (game.getWorld().moveArmyCheck(country, country2, game.getCurrentPlayer())) {
                             Parent root;
                             try {
@@ -204,7 +207,7 @@ public class BoardController  {
                     }
                 }else{
                     updateMap(game.getWorld().getPlayers(), game.getScene());
-                    attackButton.setStyle("-fx-background-color: #bd1111");
+                    attackButton.setStyle(attDisable);
                     attackButton.setDisable(true);
                     twoSelected =false;
                 }
@@ -234,7 +237,7 @@ public class BoardController  {
     }
 
     public void placeTroops() {
-        upkeepLabel.setStyle("-fx-text-fill: #777d78");
+        upkeepLabel.setStyle(enableColor);
         attackButton.setDisable(true);
         skipButton.setDisable(true);
         tradeButton.setDisable(true);
@@ -244,7 +247,7 @@ public class BoardController  {
         //Turn on the UPKEEP indicator
         upkeepLabel.setStyle("-fx-text-fill: #0fea88");
         //Turn off the FORTIFY indicator
-        fortifyLabel.setStyle("-fx-text-fill: #777d78");
+        fortifyLabel.setStyle(enableColor);
         attackButton.setDisable(true);
         skipButton.setDisable(true);
         tradeButton.setDisable(true);
@@ -252,16 +255,16 @@ public class BoardController  {
 
     public void attackPhase() {
         //Turn off the UPKEEP indicator
-        upkeepLabel.setStyle("-fx-text-fill: #777d78");
+        upkeepLabel.setStyle(enableColor);
         //Turn off the FORTIFY indicator
-        fortifyLabel.setStyle("-fx-text-fill: #777d78");
+        fortifyLabel.setStyle(enableColor);
         skipButton.setDisable(false);
         tradeButton.setDisable(true);
     }
 
     public void endTurn() {
         //Turn off the UPKEEP indicator
-        upkeepLabel.setStyle("-fx-text-fill: #777d78");
+        upkeepLabel.setStyle(enableColor);
         //Turn on the FORTIFY indicator
         fortifyLabel.setStyle("-fx-text-fill: #0fea88");
         skipButton.setDisable(false);
