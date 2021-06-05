@@ -58,13 +58,19 @@ public class GameLogic {
 
                 }
                 // update Board Map on FX thread
-                Platform.runLater(() -> drawMap(state));
+                Platform.runLater(() -> {
+                    try {
+                        drawMap(state);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
             }
         }).start();
     }
 
     //Update map
-    private void drawMap(int state){
+    private void drawMap(int state) throws IOException {
         //Initial State
         if (state == 0) {
             boardController.placeTroops();

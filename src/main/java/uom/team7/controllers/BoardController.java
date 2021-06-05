@@ -29,25 +29,21 @@ public class BoardController  {
 
     //Opens the StartMenu window
     @FXML
-    private void switchToStartMenu() {
+    private void switchToStartMenu() throws IOException {
         //close current stage
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
         //create a new stage
         Parent root;
-        try {
-            root = FXMLLoader.load(requireNonNull(StartMenuController.class.getResource("StartMenu.fxml")));
-            stage.setScene(new Scene(root, 800, 600));
-            stage.centerOnScreen();
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        root = FXMLLoader.load(requireNonNull(StartMenuController.class.getResource("StartMenu.fxml")));
+        stage.setScene(new Scene(root, 800, 600));
+        stage.centerOnScreen();
+        stage.show();
     }
 
     //Calculates the attack result,reset flags,updates map and opens fortify and winner window
     @FXML
-    private void attackButton() {
+    private void attackButton() throws IOException {
         //Sets the attackButton disable again
         attackButton.setStyle("-fx-background-color: #bd1111");
         attackButton.setDisable(true);
@@ -57,39 +53,29 @@ public class BoardController  {
         //Initialize attack
         if(game.getWorld().attack(country,country2)) {
             Parent root;
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(MessageController.class.getResource("Victory.fxml"));
-                root = fxmlLoader.load();
-                MessageController messageController = fxmlLoader.getController();
-                messageController.init(game,country,country2);
-                updateMap(game.getWorld().getPlayers(), game.getScene());
-                Stage stage = new Stage();
-                stage.setTitle("RISK");
-                stage.setScene(new Scene(root, 300, 200));
-                stage.setResizable(false);
-                stage.centerOnScreen();
-                stage.show();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            FXMLLoader fxmlLoader = new FXMLLoader(MessageController.class.getResource("Victory.fxml"));
+            root = fxmlLoader.load();
+            MessageController messageController = fxmlLoader.getController();
+            messageController.init(game, country, country2);
+            updateMap(game.getWorld().getPlayers(), game.getScene());
+            Stage stage = new Stage();
+            stage.setTitle("RISK");
+            stage.setScene(new Scene(root, 300, 200));
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
         }
         //Check if the current player is the winner
-        if(game.getWorld().checkWin(game.getWorld().getPlayers())){
+        if(game.getWorld().checkWin(game.getWorld().getPlayers())) {
             Parent root;
-            try {
-                root = FXMLLoader.load(requireNonNull(MessageController.class.getResource("WinnerMessage.fxml")));
-                Stage stage = new Stage();
-                stage.setTitle("RISK");
-                stage.setScene(new Scene(root, 450, 200));
-                stage.setResizable(false);
-                stage.alwaysOnTopProperty();
-                stage.centerOnScreen();
-                stage.show();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            root = FXMLLoader.load(requireNonNull(MessageController.class.getResource("WinnerMessage.fxml")));
+            Stage stage = new Stage();
+            stage.setTitle("RISK");
+            stage.setScene(new Scene(root, 450, 200));
+            stage.setResizable(false);
+            stage.alwaysOnTopProperty();
+            stage.centerOnScreen();
+            stage.show();
         }
         updateMap(game.getWorld().getPlayers(), game.getScene());
     }
@@ -105,23 +91,20 @@ public class BoardController  {
 
     //Opens the trade-cards window and initialise controller
     @FXML
-    private void tradeCardsButton() {
+    private void tradeCardsButton() throws IOException {
         Parent root;
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(TradeCardsController.class.getResource("TradeCards.fxml"));
-            root = fxmlLoader.load();
-            TradeCardsController tradeCardsController = fxmlLoader.getController();
-            tradeCardsController.init(game);
-            Stage stage = new Stage();
-            stage.setTitle("RISK");
-            stage.setScene(new Scene(root, 300, 370));
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            tradeButton.setDisable(true);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader fxmlLoader = new FXMLLoader(TradeCardsController.class.getResource("TradeCards.fxml"));
+        root = fxmlLoader.load();
+        TradeCardsController tradeCardsController = fxmlLoader.getController();
+        tradeCardsController.init(game);
+        Stage stage = new Stage();
+        stage.setTitle("RISK");
+        stage.setScene(new Scene(root, 300, 370));
+        stage.setResizable(false);
+        stage.centerOnScreen();
+        tradeButton.setDisable(true);
+        stage.show();
+
     }
 
     /* This is the event handler for country-buttons.Each phase has different handler
@@ -287,26 +270,22 @@ public class BoardController  {
         //Check if the player won a battle in attack phase,if true add a random card
     }
 
-    public void fullHand(GameLogic game){
+    public void fullHand(GameLogic game) throws IOException {
         //If fullHandCheck = true display TradeCards window
         if (game.isFlag()) {
             Parent root;
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(TradeCardsController.class.getResource("TradeCards.fxml"));
-                root = fxmlLoader.load();
-                Stage stage = new Stage();
-                stage.setTitle("RISK");
-                stage.setScene(new Scene(root, 300, 370));
-                stage.setResizable(false);
-                stage.centerOnScreen();
-                stage.alwaysOnTopProperty();
-                stage.show();
-                TradeCardsController tradeCardsController = fxmlLoader.getController();
-                tradeCardsController.init(game);
-                tradeCardsController.getCloseButton().setDisable(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            FXMLLoader fxmlLoader = new FXMLLoader(TradeCardsController.class.getResource("TradeCards.fxml"));
+            root = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("RISK");
+            stage.setScene(new Scene(root, 300, 370));
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.alwaysOnTopProperty();
+            stage.show();
+            TradeCardsController tradeCardsController = fxmlLoader.getController();
+            tradeCardsController.init(game);
+            tradeCardsController.getCloseButton().setDisable(true);
         }
         game.setFlag(false);
     }
