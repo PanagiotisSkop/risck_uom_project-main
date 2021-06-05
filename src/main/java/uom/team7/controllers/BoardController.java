@@ -54,7 +54,6 @@ public class BoardController  {
         //Reset selected flags
         oneSelected = false;
         twoSelected = false;
-        System.out.println("Player: "+game.getCurrentPlayer().getId()+" Attack: "+country2.toString()+" /From: "+country.toString());
         //Initialize attack
         if(game.getWorld().attack(country,country2)) {
             Parent root;
@@ -68,7 +67,6 @@ public class BoardController  {
                 stage.setTitle("RISK");
                 stage.setScene(new Scene(root, 300, 200));
                 stage.setResizable(false);
-                //stage.initStyle(StageStyle.UNDECORATED);
                 stage.centerOnScreen();
                 stage.show();
 
@@ -86,7 +84,6 @@ public class BoardController  {
                 stage.setScene(new Scene(root, 450, 200));
                 stage.setResizable(false);
                 stage.alwaysOnTopProperty();
-                //stage.initStyle(StageStyle.UNDECORATED);
                 stage.centerOnScreen();
                 stage.show();
 
@@ -119,7 +116,6 @@ public class BoardController  {
             stage.setTitle("RISK");
             stage.setScene(new Scene(root, 300, 370));
             stage.setResizable(false);
-            //stage.initStyle(StageStyle.UNDECORATED);
             stage.centerOnScreen();
             tradeButton.setDisable(true);
             stage.show();
@@ -140,7 +136,7 @@ public class BoardController  {
         String buttonId;
         if (skipButton.isDisable()) {
             buttonId = button.getId();
-            Country country = game.getWorld().fortify(buttonId,game.getCurrentPlayer());
+            country = game.getWorld().fortify(buttonId,game.getCurrentPlayer());
             button.setText(String.valueOf(country.getNumTroops()));
             unsedTroopsLabel.setText("x" + game.getCurrentPlayer().getUnsedTroops());
         }
@@ -154,7 +150,6 @@ public class BoardController  {
                 if(game.getCurrentPlayer().getCountriesOwned().contains(country) && country.getNumTroops() > 1) {
                     Button b1 = (Button) button.lookup("#" + country.toString());
                     b1.getStyleClass().add("CountryButtonHighlight");
-                    System.out.println("Selected Country: " + country.toString());
                     oneSelected = true;
                 }
             }
@@ -165,7 +160,6 @@ public class BoardController  {
                     if(!game.getCurrentPlayer().getCountriesOwned().contains(country2) && country.getAdjacentCountries().contains(country2)) {
                         Button b2 = (Button) button.lookup("#" + country2.toString());
                         b2.getStyleClass().add("CountryButtonHighlight");
-                        System.out.println("Selected Country: " + country2.toString());
                         if (game.getWorld().attackCheck(country, country2, game.getCurrentPlayer())) {
                             attackButton.setStyle("-fx-background-color: #0fea88");
                             attackButton.setDisable(false);
@@ -192,10 +186,9 @@ public class BoardController  {
             buttonId = button.getId();
             if (!oneSelected && !twoSelected) {
                 country = game.getWorld().findCountry(buttonId);
-                if(game.getCurrentPlayer().getCountriesOwned().contains(country) & country.getNumTroops() > 1) {
+                if(game.getCurrentPlayer().getCountriesOwned().contains(country) && country.getNumTroops() > 1) {
                     Button b1 = (Button) button.lookup("#" + country.toString());
                     b1.getStyleClass().add("CountryButtonHighlight");
-                    System.out.println("Selected Country: " + country.toString());
                     oneSelected = true;
                 }
             } else {
@@ -204,7 +197,6 @@ public class BoardController  {
                     if (game.getCurrentPlayer().getCountriesOwned().contains(country2) && game.getWorld().findPath(country,country2) && country != country2) {
                         Button b2 = (Button) button.lookup("#" + country2.toString());
                         b2.getStyleClass().add("CountryButtonHighlight");
-                        System.out.println("Selected Country: " + country2.toString());
                         if (game.getWorld().moveArmyCheck(country, country2, game.getCurrentPlayer())) {
                             Parent root;
                             try {
@@ -216,7 +208,6 @@ public class BoardController  {
                                 stage.setTitle("RISK");
                                 stage.setScene(new Scene(root, 250, 170));
                                 stage.setResizable(false);
-                                //stage.initStyle(StageStyle.UNDECORATED);
                                 stage.centerOnScreen();
                                 stage.show();
                             } catch (IOException e) {
@@ -302,13 +293,11 @@ public class BoardController  {
             Parent root;
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(TradeCardsController.class.getResource("TradeCards.fxml"));
-                //root = FXMLLoader.load(getClass().getResource("FXML/TradeCards.fxml"));
                 root = fxmlLoader.load();
                 Stage stage = new Stage();
                 stage.setTitle("RISK");
                 stage.setScene(new Scene(root, 300, 370));
                 stage.setResizable(false);
-                //stage.initStyle(StageStyle.UNDECORATED);
                 stage.centerOnScreen();
                 stage.alwaysOnTopProperty();
                 stage.show();

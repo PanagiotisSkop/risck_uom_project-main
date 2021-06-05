@@ -542,7 +542,9 @@ public class World{
         int total = 0;
         //trade cards one of each type,check if the player has that amount of cards
 
-        if ((rCards[0] == rCards[1]) && (rCards[0] == rCards[2]) && (rCards[0] > 0) && (player.getCards().getCards()[0] >= rCards[0]) && (player.getCards().getCards()[1] >= rCards[0]) && (player.getCards().getCards()[2] >= rCards[0])) {
+        if (    (rCards[0] == rCards[1]) && (rCards[0] == rCards[2]) &&
+                (rCards[0] > 0) && (player.getCards().getCards()[0] >= rCards[0]) &&
+                (player.getCards().getCards()[1] >= rCards[0]) && (player.getCards().getCards()[2] >= rCards[0])) {
             player.getCards().getCards()[0] -= rCards[0];
             player.getCards().getCards()[1] -= rCards[1];
             player.getCards().getCards()[2] -= rCards[2];
