@@ -4,8 +4,8 @@ import java.util.*;
 
 public class World{
 
-    private final Player[] players;
-    private final Country[] countries;
+    private Player[] players;
+    private Country[] countries;
     private int numOfTrades;
 
 
@@ -19,7 +19,7 @@ public class World{
     //create the players and initialize the unsedTroops
     public  Player[] initializePlayers(int numPlayers) {
         int unsedTroops;
-        Player[] players = new Player[numPlayers];
+        players = new Player[numPlayers];
         switch (numPlayers) {
             case 2:
                 unsedTroops = 5;
@@ -74,7 +74,7 @@ public class World{
 
     //Create a list of countries and all the 42 countries
     public   Country[] initializeCountries(){
-        Country[] countries = new Country[42];
+        countries = new Country[42];
         countries[0] = new Country("Alaska");
         countries[1] = new Country("Alberta");
         countries[2] = new Country("CentralAmerica");
@@ -488,17 +488,11 @@ public class World{
 
 
         for(int i = 0; i < 2; i++) {
-            if (attacker[i].equals(defender[i])) {
-                System.out.println("Player: " + own.getOwner().getId() + " loose");
+            if (attacker[i].equals(defender[i]) || defender[i] > attacker[i]) {
                 own.removeNumTroops(1);
             } else if (attacker[i] > defender[i]) {
-                System.out.println("Player: " + own.getOwner().getId() +" win");
                 enemy.removeNumTroops(1);
-            } else {
-                System.out.println("Player: " + own.getOwner().getId() +" loose");
-                own.removeNumTroops(1);
             }
-
         }
         return attackResult(own,enemy);
     }
@@ -547,17 +541,17 @@ public class World{
         rCards[2] = a;
         int total = 0;
         //trade cards one of each type,check if the player has that amount of cards
-        if ((rCards[0] == rCards[1]) && (rCards[0] == rCards[2]) && (rCards[0] > 0)) {
-            if ((player.getCards().getCards()[0] >= rCards[0]) && (player.getCards().getCards()[1] >= rCards[0]) && (player.getCards().getCards()[2] >= rCards[0])) {
-                player.getCards().getCards()[0] -= rCards[0];
-                player.getCards().getCards()[1] -= rCards[1];
-                player.getCards().getCards()[2] -= rCards[2];
-                for (int i = 0; i < rCards[0]; i++) {
-                    total += numOfTrades;
-                    numOfTrades += 2;
-                }
-                return total;
+
+        if ((rCards[0] == rCards[1]) && (rCards[0] == rCards[2]) && (rCards[0] > 0) && (player.getCards().getCards()[0] >= rCards[0]) && (player.getCards().getCards()[1] >= rCards[0]) && (player.getCards().getCards()[2] >= rCards[0])) {
+            player.getCards().getCards()[0] -= rCards[0];
+            player.getCards().getCards()[1] -= rCards[1];
+            player.getCards().getCards()[2] -= rCards[2];
+            for (int i = 0; i < rCards[0]; i++) {
+                total += numOfTrades;
+                numOfTrades += 2;
             }
+            return total;
+
         }
         //trade 3 cards of the same type,check if the player has that amount of cards
         for (int i = 0; i < 3; i++) {

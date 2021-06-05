@@ -10,7 +10,8 @@ import java.io.IOException;
 
 public class GameLogic {
 
-    private  int state = 0, turn = 0;
+    private  int state = 0;
+    private int turn = 0;
     private boolean flag;
     private Scene scene;
     private final World world;
@@ -53,6 +54,7 @@ public class GameLogic {
                     Thread.sleep(5);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
+
                 }
                 // update Board Map on FX thread
                 Platform.runLater(() -> drawMap(state));
@@ -116,7 +118,7 @@ public class GameLogic {
                 state = 2;
             }
         }
-        if (state == 2) {
+        if(state == 2) {
             if (currentPlayer.getUnsedTroops() == 0) {
                 state = 3;
             }
