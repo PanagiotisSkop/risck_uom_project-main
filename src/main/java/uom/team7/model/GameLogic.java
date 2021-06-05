@@ -54,6 +54,7 @@ public class GameLogic {
                     Thread.sleep(5);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
+                    Thread.currentThread().interrupt();
 
                 }
                 // update Board Map on FX thread

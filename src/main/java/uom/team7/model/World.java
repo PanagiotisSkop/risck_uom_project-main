@@ -582,7 +582,10 @@ public class World{
     }
 
     //Simulates the die roll.Returns a number 1-6.
-    public static int roll(){ return (int) Math.ceil(6 * Math.random()); }
+    public static int roll(){
+        Random r = new Random();
+        return  ( r.nextInt(6));
+    }
 
 
 

@@ -12,8 +12,8 @@ public class WinnerController {
 
     @FXML
     public void okButton() throws IOException {
-        String url_open ="https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-        java.awt.Desktop.getDesktop().browse(java.net.URI.create(url_open));
+        String url ="https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+        java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
         Stage stage = (Stage) okButton.getScene().getWindow();
         stage.close();
 

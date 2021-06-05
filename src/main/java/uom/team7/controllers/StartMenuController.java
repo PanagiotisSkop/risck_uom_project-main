@@ -27,8 +27,8 @@ public class StartMenuController {
 
     @FXML
     private void howToPLayButton() throws IOException{
-        String url_open ="https://docs.google.com/document/d/1acLcNAga5Q8TIbLqt7DTHUS2DIkE6y_vnBmF61aNWYc/edit?usp=sharing";
-        java.awt.Desktop.getDesktop().browse(java.net.URI.create(url_open));
+        String url ="https://docs.google.com/document/d/1acLcNAga5Q8TIbLqt7DTHUS2DIkE6y_vnBmF61aNWYc/edit?usp=sharing";
+        java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
     }
 
 }
