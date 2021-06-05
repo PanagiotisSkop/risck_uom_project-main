@@ -18,26 +18,24 @@ public class GameLogic {
     private Player currentPlayer;
     private BoardController boardController;
 
-    public GameLogic(int numPlayers, Stage stage) {
+    public GameLogic(int numPlayers, Stage stage) throws IOException {
 
         //Game Data initialization
         world = new World(numPlayers);
         //Create a new stage
         Parent root;
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(BoardController.class.getResource("Board.fxml"));
-            root = fxmlLoader.load();
-            scene = new Scene(root, 1024, 750);
-            boardController = fxmlLoader.getController();
-            boardController.updateMap(world.getPlayers(), scene);
-            stage.setScene(scene);
-            stage.alwaysOnTopProperty();
-            start();
-            stage.centerOnScreen();
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader(BoardController.class.getResource("Board.fxml"));
+        root = fxmlLoader.load();
+        scene = new Scene(root, 1024, 750);
+        boardController = fxmlLoader.getController();
+        boardController.updateMap(world.getPlayers(), scene);
+        stage.setScene(scene);
+        stage.alwaysOnTopProperty();
+        start();
+        stage.centerOnScreen();
+        stage.show();
+
     }
 
     //Starts the Thread for the game loop

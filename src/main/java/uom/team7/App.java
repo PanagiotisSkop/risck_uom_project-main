@@ -34,7 +34,7 @@ public class App extends Application {
         launch(args);
     }
 
-    public static void startGame(int numPlayers) { new GameLogic(numPlayers, primaryStage); }
+    public static void startGame(int numPlayers) throws IOException { new GameLogic(numPlayers, primaryStage); }
 
     public static Scene getScene() {
         return startMenu;
