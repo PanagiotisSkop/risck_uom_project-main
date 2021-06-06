@@ -11,13 +11,13 @@ public class World{
 
     public World(int numPlayers) {
         numOfTrades = 6;
-        players = initializePlayers(numPlayers);
-        countries = initializeCountries();
+        initializePlayers(numPlayers);
+        initializeCountries();
         initializeCountryOwners(countries, players, numPlayers);
     }
 
     //create the players and initialize the unsedTroops
-    public  Player[] initializePlayers(int numPlayers) {
+    public void initializePlayers(int numPlayers) {
         int unsedTroops;
         players = new Player[numPlayers];
         switch (numPlayers) {
@@ -69,11 +69,10 @@ public class World{
             players[i].setColor(playerColor);
         }
         Collections.shuffle(Arrays.asList(players));
-        return players;
     }
 
     //Create a list of countries and all the 42 countries
-    public   Country[] initializeCountries(){
+    public void initializeCountries(){
         countries = new Country[42];
         countries[0] = new Country("Alaska");
         countries[1] = new Country("Alberta");
@@ -407,8 +406,6 @@ public class World{
         countries[41].adjacentCountries.add(countries[38]);
         countries[41].adjacentCountries.add(countries[39]);
         countries[41].adjacentCountries.add(countries[40]);
-
-        return  countries;
     }
 
     public  boolean findPath(Country country,Country country2){
@@ -485,7 +482,7 @@ public class World{
 
 
         for(int i = 0; i < 2; i++) {
-            if (attacker[i].equals(defender[i]) || defender[i] > attacker[i]) {
+            if (defender[i] >= attacker[i]) {
                 own.removeNumTroops(1);
             } else if (attacker[i] > defender[i]) {
                 enemy.removeNumTroops(1);
