@@ -24,7 +24,6 @@ public class GameLogic {
         world = new World(numPlayers);
         //Create a new stage
         Parent root;
-
         FXMLLoader fxmlLoader = new FXMLLoader(BoardController.class.getResource("Board.fxml"));
         root = fxmlLoader.load();
         scene = new Scene(root, 1024, 750);
@@ -35,7 +34,6 @@ public class GameLogic {
         start();
         stage.centerOnScreen();
         stage.show();
-
     }
 
     //Starts the Thread for the game loop
@@ -53,7 +51,6 @@ public class GameLogic {
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                     Thread.currentThread().interrupt();
-
                 }
                 // update Board Map on FX thread
                 Platform.runLater(() -> {
@@ -95,6 +92,36 @@ public class GameLogic {
     //Calculate the current state of the game and the current player
     private  void gameState(){
         currentPlayer = world.getPlayer(turn);
+        checkPlayer();
+        switch (state){
+            case 0:
+                placeTroopsState();
+                break;
+            case 1:
+                upkeepState();
+                break;
+            case 2:
+                if(currentPlayer.getUnsedTroops() == 0) {
+                    state = 3;
+                }
+                break;
+            case 3: //Waiting to press SKIP
+            case 4: //Waiting to press SKIP
+                break;
+            case 5:
+                endturnState();
+                break;
+            case 6:
+                if(!flag){
+                    state = 2;
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + state);
+        }
+    }
+
+    private void checkPlayer(){
         if(currentPlayer.statusCheck()){
             if(currentPlayer == world.getPlayer(world.getPlayers().length-1)){
                 turn = 0;
@@ -104,50 +131,36 @@ public class GameLogic {
             currentPlayer = world.getPlayer(turn);
             state = 1;
         }
-        switch (state){
-            case 0:
-                if(currentPlayer == world.getPlayer(world.getPlayers().length-1) && currentPlayer.getUnsedTroops() == 0) {
-                    turn = 0;
-                    state = 1;
-                    currentPlayer = world.getPlayer(turn);
-                } else if(currentPlayer.getUnsedTroops() == 0 && currentPlayer != world.getPlayer(world.getPlayers().length-1)) {
-                    turn++;
-                }
-                break;
-            case 1:
-                currentPlayer.setWonCard(false);
-                world.updateUnsedTroops(currentPlayer);
-                if(currentPlayer.getCards().fullHandCheck()) {
-                    state = 6;
-                    flag = true;
-                }else {
-                    state = 2;
-                }
-                break;
-            case 2:
-                if(currentPlayer.getUnsedTroops() == 0) {
-                    state = 3;
-                }
-                break;
-            case 3:
-            case 4:
-                break;
-            case 5:
-                currentPlayer.getCards().winCard(currentPlayer.isWonCard()); /// <----
-                state = 1;
-                if (currentPlayer == world.getPlayer(world.getPlayers().length-1)) {
-                    turn = 0;
-                } else {
-                    turn++;
-                }
-                break;
-            case 6:
-                if(!flag){
-                    state = 2;
-                }
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + state);
+    }
+
+    private void placeTroopsState(){
+        if(currentPlayer == world.getPlayer(world.getPlayers().length-1) && currentPlayer.getUnsedTroops() == 0) {
+            turn = 0;
+            state = 1;
+            currentPlayer = world.getPlayer(turn);
+        } else if(currentPlayer.getUnsedTroops() == 0 && currentPlayer != world.getPlayer(world.getPlayers().length-1)) {
+            turn++;
+        }
+    }
+
+    private void upkeepState(){
+        currentPlayer.setWonCard(false);
+        world.updateUnsedTroops(currentPlayer);
+        if(currentPlayer.getCards().fullHandCheck()) {
+            state = 6;
+            flag = true;
+        }else {
+            state = 2;
+        }
+    }
+
+    private void endturnState() {
+        currentPlayer.getCards().winCard(currentPlayer.isWonCard()); /// <----
+        state = 1;
+        if (currentPlayer == world.getPlayer(world.getPlayers().length-1)) {
+            turn = 0;
+        } else {
+            turn++;
         }
     }
 

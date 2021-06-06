@@ -26,6 +26,7 @@ public class BoardController  {
     private Country country,country2;
     private boolean twoSelected = false,oneSelected = false;
     private GameLogic game;
+    private String buttonId;
     private String disableColor = "-fx-background-color: #bd1111";
     private String highLightStyle = "CountryButtonHighlight";
     private String enableColor = "-fx-text-fill: #777d78";
@@ -119,98 +120,111 @@ public class BoardController  {
         Button button = (Button) event.getSource();
 
         //Upkeep handler
-        String buttonId;
         if (skipButton.isDisable()) {
-            buttonId = button.getId();
-            country = game.getWorld().fortify(buttonId,game.getCurrentPlayer());
-            button.setText(String.valueOf(country.getNumTroops()));
-            unsedTroopsLabel.setText("x" + game.getCurrentPlayer().getUnsedTroops());
+          upkeepHandler(button);
         }
-
         //attack phase handler
         else if (tradeButton.isDisable()) {
-            buttonId = button.getId();
-            //If the first country is selected do stuff
-            if ( !oneSelected && !twoSelected ){
-                country = game.getWorld().findCountry(buttonId);
-                if(game.getCurrentPlayer().getCountriesOwned().contains(country) && country.getNumTroops() > 1) {
-                    Button b1 = (Button) button.lookup("#" + country.toString());
-                    b1.getStyleClass().add(highLightStyle);
-                    oneSelected = true;
-                }
-            }
-            else {
-                //If the second country is selected do stuff
-                if( oneSelected && !twoSelected) {
-                    country2 = game.getWorld().findCountry(buttonId);
-                    if(!game.getCurrentPlayer().getCountriesOwned().contains(country2) && country.getAdjacentCountries().contains(country2)) {
-                        Button b2 = (Button) button.lookup("#" + country2.toString());
-                        b2.getStyleClass().add(highLightStyle);
-                        if (game.getWorld().attackCheck(country, country2, game.getCurrentPlayer())) {
-                            attackButton.setStyle("-fx-background-color: #0fea88");
-                            attackButton.setDisable(false);
-                        }
-                        twoSelected = true;
-                    }
-                    else {
-                        updateMap(game.getWorld().getPlayers(), game.getScene());
-                        twoSelected =false;
-                    }
-                    //Reset selected countries if the user select a third country
-                }else{
-                    updateMap(game.getWorld().getPlayers(), game.getScene());
-                    attackButton.setStyle(disableColor);
-                    attackButton.setDisable(true);
-                    twoSelected =false;
-                }
-                oneSelected = false;
-            }
+           attackHandler(button);
         }
-
         //Endturn handler
         else if (attackButton.isDisable()) {
-            buttonId = button.getId();
-            if (!oneSelected && !twoSelected) {
-                country = game.getWorld().findCountry(buttonId);
-                if(game.getCurrentPlayer().getCountriesOwned().contains(country) && country.getNumTroops() > 1) {
-                    Button b1 = (Button) button.lookup("#" + country.toString());
-                    b1.getStyleClass().add(highLightStyle);
-                    oneSelected = true;
-                }
-            } else {
-                if( oneSelected && !twoSelected) {
-                    country2 = game.getWorld().findCountry(buttonId);
-                    if (game.getCurrentPlayer().getCountriesOwned().contains(country2) && game.getWorld().findPath(country,country2) && country != country2) {
-                        Button b2 = (Button) button.lookup("#" + country2.toString());
-                        b2.getStyleClass().add(highLightStyle);
-                        if (game.getWorld().moveArmyCheck(country, country2, game.getCurrentPlayer())) {
-                            Parent root;
-                            FXMLLoader fxmlLoader = new FXMLLoader(MessageController.class.getResource("Fortify.fxml"));
-                            root = fxmlLoader.load();
-                            MessageController messageController = fxmlLoader.getController();
-                            messageController.init(game, country, country2);
-                            Stage stage = new Stage();
-                            stage.setTitle("RISK");
-                            stage.setScene(new Scene(root, 250, 170));
-                            stage.setResizable(false);
-                            stage.centerOnScreen();
-                            stage.show();
-                        }
-                        twoSelected = true;
-                    }else {
-                        updateMap(game.getWorld().getPlayers(), game.getScene());
-                        twoSelected =false;
-                    }
-                }else{
-                    updateMap(game.getWorld().getPlayers(), game.getScene());
-                    attackButton.setStyle(disableColor);
-                    attackButton.setDisable(true);
-                    twoSelected =false;
-                }
-                oneSelected = false;
-            }
+            endturnHandler(button);
         }
     }
+
+    //This method handles the button event trigger in the upkeep phase
+    private void upkeepHandler(Button button){
+        buttonId = button.getId();
+        country = game.getWorld().fortify(buttonId,game.getCurrentPlayer());
+        button.setText(String.valueOf(country.getNumTroops()));
+        unsedTroopsLabel.setText("x" + game.getCurrentPlayer().getUnsedTroops());
+    }
+
+    //This method handles the button event trigger in the attack phase
+    private void attackHandler(Button button) {
+        buttonId = button.getId();
+        //If the first country is selected do stuff
+        if ( !oneSelected && !twoSelected ){
+            country = game.getWorld().findCountry(buttonId);
+            if(game.getCurrentPlayer().getCountriesOwned().contains(country) && country.getNumTroops() > 1) {
+                Button b1 = (Button) button.lookup("#" + country.toString());
+                b1.getStyleClass().add(highLightStyle);
+                oneSelected = true;
+            }
+        }
+        else {
+            //If the second country is selected do stuff
+            if( oneSelected && !twoSelected) {
+                country2 = game.getWorld().findCountry(buttonId);
+                if(!game.getCurrentPlayer().getCountriesOwned().contains(country2) && country.getAdjacentCountries().contains(country2)) {
+                    Button b2 = (Button) button.lookup("#" + country2.toString());
+                    b2.getStyleClass().add(highLightStyle);
+                    if (game.getWorld().attackCheck(country, country2, game.getCurrentPlayer())) {
+                        attackButton.setStyle("-fx-background-color: #0fea88");
+                        attackButton.setDisable(false);
+                    }
+                    twoSelected = true;
+                }
+                else {
+                    updateMap(game.getWorld().getPlayers(), game.getScene());
+                    twoSelected =false;
+                }
+                //Reset selected countries if the user select a third country
+            }else{
+                updateMap(game.getWorld().getPlayers(), game.getScene());
+                attackButton.setStyle(disableColor);
+                attackButton.setDisable(true);
+                twoSelected =false;
+            }
+            oneSelected = false;
+        }
+    }
+
+    //This method handles the button event trigger in the endturn phase
+    private void endturnHandler(Button button) throws IOException {
+        buttonId = button.getId();
+        if (!oneSelected && !twoSelected) {
+            country = game.getWorld().findCountry(buttonId);
+            if(game.getCurrentPlayer().getCountriesOwned().contains(country) && country.getNumTroops() > 1) {
+                Button b1 = (Button) button.lookup("#" + country.toString());
+                b1.getStyleClass().add(highLightStyle);
+                oneSelected = true;
+            }
+        } else {
+            if( oneSelected && !twoSelected) {
+                country2 = game.getWorld().findCountry(buttonId);
+                if (game.getCurrentPlayer().getCountriesOwned().contains(country2) && game.getWorld().findPath(country,country2) && country != country2) {
+                    Button b2 = (Button) button.lookup("#" + country2.toString());
+                    b2.getStyleClass().add(highLightStyle);
+                    if (game.getWorld().moveArmyCheck(country, country2, game.getCurrentPlayer())) {
+                        Parent root;
+                        FXMLLoader fxmlLoader = new FXMLLoader(MessageController.class.getResource("Fortify.fxml"));
+                        root = fxmlLoader.load();
+                        MessageController messageController = fxmlLoader.getController();
+                        messageController.init(game, country, country2);
+                        Stage stage = new Stage();
+                        stage.setTitle("RISK");
+                        stage.setScene(new Scene(root, 250, 170));
+                        stage.setResizable(false);
+                        stage.centerOnScreen();
+                        stage.show();
+                    }
+                    twoSelected = true;
+                }else {
+                    updateMap(game.getWorld().getPlayers(), game.getScene());
+                    twoSelected =false;
+                }
+            }else{
+                updateMap(game.getWorld().getPlayers(), game.getScene());
+                attackButton.setStyle(disableColor);
+                attackButton.setDisable(true);
+                twoSelected =false;
+            }
+            oneSelected = false;
+        }
+    }
+
 
     public void init(GameLogic gameLogic){
         game = gameLogic;

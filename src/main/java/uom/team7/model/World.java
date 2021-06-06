@@ -416,10 +416,7 @@ public class World{
             if(c.getOwner() == country.getOwner()) {
                 if (c.getAdjacentCountries().contains(country2)){ return  true;}
                 for (Country c1 : c.getAdjacentCountries()) {
-                    if (c1.getAdjacentCountries().contains(country2) && c1.getOwner() == country.getOwner()) {
-                        return true;
-                    }
-                    if(c1.equals(country2)) {
+                    if (c1.getAdjacentCountries().contains(country2) && c1.getOwner() == country.getOwner() || c1.equals(country2)) {
                         return true;
                     }
                 }
@@ -578,7 +575,7 @@ public class World{
                 countDead++;
             }
         }
-        return players.length - 1 == countDead;
+       return players.length - 1 == countDead;
     }
 
     //Simulates the die roll.Returns a number 1-6.
